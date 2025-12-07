@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plant_app/core/routes/app_router.dart';
+import 'package:plant_app/core/themes/app_light_theme.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,14 +14,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Hubx Plant App ',
+      title: 'Hubx Demo Plant App',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      builder: (context, child) {
+        return Theme(
+          data: AppTheme.getTheme(context),
+          child: child!,
+        );
+      },
       routerConfig: _appRouter.config(),
     );
   }
 }
-
