@@ -22,6 +22,6 @@ class HelperConstants {
   static const double paywallCardGap = 8.0;
 
   static const double homeSearchBarHeight = 50.0;
-  static const double homeHorizontalCardHeight = 240.0;
+  static const double homeHorizontalCardHeight = 160.0;
   static const double homeHorizontalCardWidth = 240.0;
 }
