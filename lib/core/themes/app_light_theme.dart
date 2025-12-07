@@ -3,17 +3,13 @@ import 'package:flutter/services.dart';
 
 class AppTheme {
   static const Color _primaryGreen = Color(0xFF28AF6E);
-  static const Color _lightBackground = Colors.white;
 
   static ThemeData getTheme(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    final double textScale = size.width / 375.0;
-    final double buttonHeight = size.height * 0.07;
-
     return ThemeData(
       useMaterial3: true,
-      scaffoldBackgroundColor: _lightBackground,
+      scaffoldBackgroundColor: Colors.white,
+
+      iconTheme: const IconThemeData(color: Colors.white, size: 17),
 
       colorScheme: const ColorScheme.light(
         primary: _primaryGreen,
@@ -29,7 +25,7 @@ class AppTheme {
         iconTheme: const IconThemeData(color: Colors.black87),
         titleTextStyle: TextStyle(
           color: Colors.black87,
-          fontSize: 18 * textScale,
+          fontSize: 18 * MediaQuery.of(context).size.width / 375.0,
           fontWeight: FontWeight.w600,
         ),
       ),
@@ -43,9 +39,12 @@ class AppTheme {
             borderRadius: BorderRadius.circular(12),
           ),
           padding: EdgeInsets.zero,
-          minimumSize: Size(double.infinity, buttonHeight),
+          minimumSize: Size(
+            double.infinity,
+            MediaQuery.of(context).size.height * 0.07,
+          ),
           textStyle: TextStyle(
-            fontSize: 16 * textScale,
+            fontSize: 16 * MediaQuery.of(context).size.width / 375.0,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -54,11 +53,17 @@ class AppTheme {
       textTheme: TextTheme(
         displaySmall: TextStyle(
           color: Colors.black87,
-          fontSize: 28 * textScale,
+          fontSize: 28 * MediaQuery.of(context).size.width / 375.0,
           fontWeight: FontWeight.w300,
         ),
-        bodyLarge: TextStyle(color: Colors.grey, fontSize: 16 * textScale),
-        labelSmall: TextStyle(color: Colors.grey, fontSize: 11 * textScale),
+        bodyLarge: TextStyle(
+          color: Colors.grey,
+          fontSize: 16 * MediaQuery.of(context).size.width / 375.0,
+        ),
+        labelSmall: TextStyle(
+          color: Colors.grey,
+          fontSize: 11 * MediaQuery.of(context).size.width / 375.0,
+        ),
       ),
     );
   }

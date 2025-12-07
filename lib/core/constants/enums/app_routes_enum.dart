@@ -1,5 +1,6 @@
 enum AppRoutesEnum {
   onboarding('/onboarding'),
+  paywall('/paywall'),
   home('/home');
 
   final String routeName;

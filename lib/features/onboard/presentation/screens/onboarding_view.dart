@@ -41,7 +41,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
         TitleFragment('care guides', isBold: true),
       ],
     ),
-    const OnboardingModel(imagePath: '', title: []),
   ];
 
   @override
@@ -52,7 +51,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   void _nextPage() {
     if (_currentPage == _pages.length - 1) {
-      context.router.replace(const HomeRoute());
+      context.router.push(const PaywallRoute());
     } else {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
@@ -63,10 +62,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_currentPage == 3) {
-      return _buildSpecialPage(context);
-    }
-
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
@@ -82,8 +77,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   });
                 },
                 itemBuilder: (context, index) {
-                  if (index == 3) return const SizedBox.shrink();
-
                   return Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal:
@@ -211,25 +204,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
     return const SizedBox.shrink();
   }
 
-  Widget _buildSpecialPage(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Paywall / Special Page")),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text("Bambaşka Sayfa Tasarımı Buraya Gelecek"),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => context.router.replace(const HomeRoute()),
-              child: const Text("Home'a Git"),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildTermsText(ThemeData theme) {
     return RichText(
       textAlign: TextAlign.center,
@@ -243,20 +217,18 @@ class _OnboardingPageState extends State<OnboardingPage> {
           ),
           TextSpan(
             text: 'Terms of Use',
-            style: theme.textTheme.labelSmall
-                ?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant.withOpacity(0.6),
-                  decoration: TextDecoration.underline
-                )
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant.withOpacity(0.6),
+              decoration: TextDecoration.underline,
+            ),
           ),
           const TextSpan(text: ' & '),
           TextSpan(
             text: 'Privacy Policy',
-            style: theme.textTheme.labelSmall
-                ?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant.withOpacity(0.6),
-                  decoration: TextDecoration.underline
-                )
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant.withOpacity(0.6),
+              decoration: TextDecoration.underline,
+            ),
           ),
           const TextSpan(text: '.'),
         ],
