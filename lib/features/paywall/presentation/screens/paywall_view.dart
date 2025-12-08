@@ -1,24 +1,37 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plant_app/core/constants/helper_constants.dart';
 import 'package:plant_app/core/extensions/padding_ext.dart';
 import 'package:plant_app/core/extensions/sizedbox_ext.dart';
+import 'package:plant_app/core/init/di_container.dart';
+import 'package:plant_app/core/routes/app_router.dart';
 import 'package:plant_app/core/widgets/buttons/main_button.dart';
+import 'package:plant_app/features/paywall/cubit/paywall_cubit.dart';
 import 'package:plant_app/features/paywall/presentation/widgets/paywall_feature_card.dart';
 import 'package:plant_app/features/paywall/presentation/widgets/paywall_subs_card.dart';
-import '../../../../core/routes/app_router.dart';
 
 @RoutePage()
-class PaywallPage extends StatefulWidget {
+class PaywallPage extends StatelessWidget {
   const PaywallPage({super.key});
 
   @override
-  State<PaywallPage> createState() => _PaywallPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => locator<PaywallCubit>(),
+      child: const _PaywallView(),
+    );
+  }
 }
 
-class _PaywallPageState extends State<PaywallPage> {
-  int _selectedPlanIndex = 1;
+class _PaywallView extends StatefulWidget {
+  const _PaywallView();
 
+  @override
+  State<_PaywallView> createState() => _PaywallViewState();
+}
+
+class _PaywallViewState extends State<_PaywallView> {
   final List<Map<String, dynamic>> _features = [
     {
       'icon': Icons.center_focus_strong,
@@ -47,7 +60,6 @@ class _PaywallPageState extends State<PaywallPage> {
               fit: BoxFit.fitWidth,
             ),
           ),
-
           SafeArea(
             child: Padding(
               padding: EdgeInsets.symmetric(
@@ -79,9 +91,7 @@ class _PaywallPageState extends State<PaywallPage> {
                       ),
                     ),
                   ),
-
                   const Spacer(),
-
                   RichText(
                     text: TextSpan(
                       style: theme.textTheme.displaySmall?.copyWith(
@@ -99,9 +109,7 @@ class _PaywallPageState extends State<PaywallPage> {
                       ],
                     ),
                   ),
-
                   HelperConstants.paywallTitleSubtitleSpacing.height,
-
                   Text(
                     'Unlock All Features',
                     style: theme.textTheme.headlineSmall?.copyWith(
@@ -110,9 +118,7 @@ class _PaywallPageState extends State<PaywallPage> {
                       fontSize: 18,
                     ),
                   ),
-
                   HelperConstants.paywallFeaturesGap.height,
-
                   SizedBox(
                     height: size.height * 0.15,
                     child: ListView.builder(
@@ -137,40 +143,38 @@ class _PaywallPageState extends State<PaywallPage> {
                       },
                     ),
                   ),
-
                   20.height,
 
-                  SubscriptionOptionCard(
-                    isSelected: _selectedPlanIndex == 0,
-                    title: '1 Month',
-                    subtitle: '\$2.99/month, auto renewable',
-                    onTap: () {
-                      setState(() {
-                        _selectedPlanIndex = 0;
-                      });
-                    },
-                  ),
-
-                  10.height,
-
-                  SubscriptionOptionCard(
-                    isSelected: _selectedPlanIndex == 1,
-                    title: '1 Year',
-                    subtitle: 'First 3 days free, then \$529.99/year',
-                    badgeText: 'Save 50%',
-                    onTap: () {
-                      setState(() {
-                        _selectedPlanIndex = 1;
-                      });
+                  BlocBuilder<PaywallCubit, PaywallState>(
+                    builder: (context, state) {
+                      return Column(
+                        children: [
+                          SubscriptionOptionCard(
+                            isSelected: state.selectedPlanIndex == 0,
+                            title: '1 Month',
+                            subtitle: '\$2.99/month, auto renewable',
+                            onTap: () {
+                              context.read<PaywallCubit>().selectPlan(0);
+                            },
+                          ),
+                          10.height,
+                          SubscriptionOptionCard(
+                            isSelected: state.selectedPlanIndex == 1,
+                            title: '1 Year',
+                            subtitle: 'First 3 days free, then \$529.99/year',
+                            badgeText: 'Save 50%',
+                            onTap: () {
+                              context.read<PaywallCubit>().selectPlan(1);
+                            },
+                          ),
+                        ],
+                      );
                     },
                   ),
 
                   24.height,
-
                   MainButton(text: 'Try Free for 3 days', onPressed: () {}),
-
                   12.height,
-
                   Text(
                     'After the 3-day free trial period you’ll be charged ₺274.99 per year unless you cancel before the trial expires. Yearly Subscription is Auto-Renewable',
                     textAlign: TextAlign.center,
@@ -180,9 +184,7 @@ class _PaywallPageState extends State<PaywallPage> {
                       fontWeight: FontWeight.w300,
                     ),
                   ),
-
                   10.height,
-
                   Center(
                     child: Text(
                       'Terms  •  Privacy  •  Restore',
@@ -192,7 +194,6 @@ class _PaywallPageState extends State<PaywallPage> {
                       ),
                     ),
                   ),
-
                   10.height,
                 ],
               ),
