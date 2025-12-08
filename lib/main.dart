@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:plant_app/core/init/di_container.dart' as di;
 import 'package:plant_app/core/routes/app_router.dart';
 import 'package:plant_app/core/themes/app_light_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   await di.init();
   runApp(MyApp());
 }
