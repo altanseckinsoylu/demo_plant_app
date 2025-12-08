@@ -96,7 +96,8 @@ class _OnboardingViewState extends State<_OnboardingView> {
                                   children: List.generate(
                                     state.pages.length,
                                     (index) => DotIndicator(
-                                      isActive: index == state.currentPageIndex,
+                                      isActive:
+                                          index == (state.currentPageIndex - 1),
                                     ),
                                   ),
                                 ),

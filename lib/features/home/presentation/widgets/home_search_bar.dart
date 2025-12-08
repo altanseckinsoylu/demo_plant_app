@@ -9,7 +9,7 @@ class HomeSearchField extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        color: HelperConstants.searchBarBg,
+        color: HelperConstants.searchBarBg.withOpacity(0.9),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: HelperConstants.searchBarBorder),
       ),

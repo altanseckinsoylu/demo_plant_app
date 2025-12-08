@@ -49,7 +49,7 @@ class _HomeView extends StatelessWidget {
                   3,
                   (index) => QuestionModel(
                     id: 0,
-                    title: 'Dummy Title for Skeleton Loading View',
+                    title: 'Dummy Title',
                     subtitle: '',
                     imageUri: '',
                     uri: '',
@@ -102,12 +102,13 @@ class _HomeView extends StatelessWidget {
                   titleSpacing: 20,
                   flexibleSpace: FlexibleSpaceBar(
                     background: Stack(
-                      fit: StackFit.expand,
                       children: [
-                        Positioned.fill(
+                        Align(
+                          alignment: Alignment.bottomLeft,
                           child: Image.asset(
+                            width: MediaQuery.of(context).size.width,
                             'assets/images/home_images/leaf.png',
-                            fit: BoxFit.cover,
+                            fit: BoxFit.fitWidth,
                           ),
                         ),
                       ],
