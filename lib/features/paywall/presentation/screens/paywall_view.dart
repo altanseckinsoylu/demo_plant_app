@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plant_app/core/constants/helper_constants.dart';
 import 'package:plant_app/core/extensions/padding_ext.dart';
@@ -58,7 +59,7 @@ class _PaywallViewState extends State<_PaywallView> {
             child: Image.asset(
               'assets/images/onboarding_images/paywall.png',
               fit: BoxFit.fitWidth,
-            ),
+            ).animate().fade(duration: 600.ms),
           ),
           SafeArea(
             child: Padding(
@@ -92,109 +93,127 @@ class _PaywallViewState extends State<_PaywallView> {
                     ),
                   ),
                   const Spacer(),
-                  RichText(
-                    text: TextSpan(
-                      style: theme.textTheme.displaySmall?.copyWith(
-                        color: theme.colorScheme.onPrimary,
-                      ),
-                      children: const [
-                        TextSpan(
-                          text: 'PlantApp ',
-                          style: TextStyle(fontWeight: FontWeight.w800),
+                  ...[
+                        RichText(
+                          text: TextSpan(
+                            style: theme.textTheme.displaySmall?.copyWith(
+                              color: theme.colorScheme.onPrimary,
+                            ),
+                            children: const [
+                              TextSpan(
+                                text: 'PlantApp ',
+                                style: TextStyle(fontWeight: FontWeight.w800),
+                              ),
+                              TextSpan(
+                                text: 'Premium',
+                                style: TextStyle(fontWeight: FontWeight.w300),
+                              ),
+                            ],
+                          ),
                         ),
-                        TextSpan(
-                          text: 'Premium',
-                          style: TextStyle(fontWeight: FontWeight.w300),
+                        HelperConstants.paywallTitleSubtitleSpacing.height,
+                        Text(
+                          'Unlock All Features',
+                          style: theme.textTheme.headlineSmall?.copyWith(
+                            color: theme.colorScheme.onPrimary.withOpacity(0.7),
+                            fontWeight: FontWeight.w400,
+                            fontSize: 18,
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
-                  HelperConstants.paywallTitleSubtitleSpacing.height,
-                  Text(
-                    'Unlock All Features',
-                    style: theme.textTheme.headlineSmall?.copyWith(
-                      color: theme.colorScheme.onPrimary.withOpacity(0.7),
-                      fontWeight: FontWeight.w400,
-                      fontSize: 18,
-                    ),
-                  ),
-                  HelperConstants.paywallFeaturesGap.height,
-                  SizedBox(
-                    height: size.height * 0.15,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      physics: const BouncingScrollPhysics(),
-                      clipBehavior: Clip.none,
-                      itemCount: _features.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: index != _features.length - 1
-                              ? HelperConstants.paywallCardGap.paddingRight
-                              : EdgeInsets.zero,
-                          child: SizedBox(
-                            width: size.width * 0.42,
-                            child: PaywallFeatureCard(
-                              icon: _features[index]['icon'],
-                              title: _features[index]['title'],
-                              subtitle: _features[index]['subtitle'],
+                        HelperConstants.paywallFeaturesGap.height,
+                        SizedBox(
+                          height: size.height * 0.15,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            physics: const BouncingScrollPhysics(),
+                            clipBehavior: Clip.none,
+                            itemCount: _features.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: index != _features.length - 1
+                                    ? HelperConstants
+                                          .paywallCardGap
+                                          .paddingRight
+                                    : EdgeInsets.zero,
+                                child: SizedBox(
+                                  width: size.width * 0.42,
+                                  child: PaywallFeatureCard(
+                                    icon: _features[index]['icon'],
+                                    title: _features[index]['title'],
+                                    subtitle: _features[index]['subtitle'],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        20.height,
+                        BlocBuilder<PaywallCubit, PaywallState>(
+                          builder: (context, state) {
+                            return Column(
+                              children: [
+                                SubscriptionOptionCard(
+                                  isSelected: state.selectedPlanIndex == 0,
+                                  title: '1 Month',
+                                  subtitle: '\$2.99/month, auto renewable',
+                                  onTap: () {
+                                    context.read<PaywallCubit>().selectPlan(0);
+                                  },
+                                ),
+                                10.height,
+                                SubscriptionOptionCard(
+                                  isSelected: state.selectedPlanIndex == 1,
+                                  title: '1 Year',
+                                  subtitle:
+                                      'First 3 days free, then \$529.99/year',
+                                  badgeText: 'Save 50%',
+                                  onTap: () {
+                                    context.read<PaywallCubit>().selectPlan(1);
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                        24.height,
+                        MainButton(
+                          text: 'Try Free for 3 days',
+                          onPressed: () {},
+                        ),
+                        12.height,
+                        Text(
+                          'After the 3-day free trial period you’ll be charged ₺274.99 per year unless you cancel before the trial expires. Yearly Subscription is Auto-Renewable',
+                          textAlign: TextAlign.center,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onPrimary.withOpacity(
+                              0.54,
+                            ),
+                            fontSize: 10,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                        10.height,
+                        Center(
+                          child: Text(
+                            'Terms  •  Privacy  •  Restore',
+                            style: theme.textTheme.labelSmall?.copyWith(
+                              color: theme.colorScheme.onPrimary.withOpacity(
+                                0.54,
+                              ),
+                              fontSize: 11,
                             ),
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                  20.height,
-
-                  BlocBuilder<PaywallCubit, PaywallState>(
-                    builder: (context, state) {
-                      return Column(
-                        children: [
-                          SubscriptionOptionCard(
-                            isSelected: state.selectedPlanIndex == 0,
-                            title: '1 Month',
-                            subtitle: '\$2.99/month, auto renewable',
-                            onTap: () {
-                              context.read<PaywallCubit>().selectPlan(0);
-                            },
-                          ),
-                          10.height,
-                          SubscriptionOptionCard(
-                            isSelected: state.selectedPlanIndex == 1,
-                            title: '1 Year',
-                            subtitle: 'First 3 days free, then \$529.99/year',
-                            badgeText: 'Save 50%',
-                            onTap: () {
-                              context.read<PaywallCubit>().selectPlan(1);
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-
-                  24.height,
-                  MainButton(text: 'Try Free for 3 days', onPressed: () {}),
-                  12.height,
-                  Text(
-                    'After the 3-day free trial period you’ll be charged ₺274.99 per year unless you cancel before the trial expires. Yearly Subscription is Auto-Renewable',
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onPrimary.withOpacity(0.54),
-                      fontSize: 10,
-                      fontWeight: FontWeight.w300,
-                    ),
-                  ),
-                  10.height,
-                  Center(
-                    child: Text(
-                      'Terms  •  Privacy  •  Restore',
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.onPrimary.withOpacity(0.54),
-                        fontSize: 11,
+                        ),
+                        10.height,
+                      ]
+                      .animate(interval: 50.ms)
+                      .fade(duration: 400.ms)
+                      .slideY(
+                        begin: 0.2,
+                        end: 0,
+                        duration: 400.ms,
+                        curve: Curves.easeOut,
                       ),
-                    ),
-                  ),
-                  10.height,
                 ],
               ),
             ),
